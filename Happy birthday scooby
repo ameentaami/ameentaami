@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0d12">
+<title>A Journey for Scooby</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#0b0d12;color:#f7f8fb;font-family:Arial,Helvetica,sans-serif}
+body{overflow-x:hidden}
+button{font:inherit}
+.screen{display:none;min-height:100svh;padding:28px 18px;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+.screen.active{display:flex}
+#intro{background:radial-gradient(circle at 50% 15%,rgba(255,205,65,.18),transparent 32%),linear-gradient(160deg,#0b0d12,#171b25)}
+.ticket{font-size:11px;letter-spacing:2px;color:#ffcf4a;border:1px solid #5b512e;padding:8px 12px;border-radius:99px}
+.emoji-train{font-size:68px;margin:45px 0 8px;animation:bob 1.5s ease-in-out infinite}
+h1{font-size:clamp(45px,13vw,78px);line-height:.95;margin:0;font-weight:900;letter-spacing:-3px}
+h1 span{color:#ffcf4a}
+.sub{font-size:22px;font-weight:800;margin:18px 0 6px}
+.small{max-width:350px;color:#aeb5c4;line-height:1.5;margin:0 0 30px}
+.primary,.secondary{border:0;border-radius:14px;padding:15px 22px;font-weight:900;cursor:pointer}
+.primary{background:#ffcf4a;color:#101010}
+.secondary{background:#252b38;color:#fff;margin-top:18px}
+#journey{justify-content:flex-start;padding-top:25px}
+.topbar{width:min(720px,100%);display:flex;justify-content:space-between;color:#aeb5c4;font-size:10px;letter-spacing:1.7px;margin-bottom:30px}
+.route{width:min(720px,100%);height:125px;position:relative}
+.line{position:absolute;top:44px;left:6%;right:6%;height:5px;background:#353c4d;border-radius:99px}
+.train{position:absolute;top:5px;left:4%;font-size:35px;z-index:3;transition:left 1s cubic-bezier(.2,.8,.2,1)}
+.station{position:absolute;top:34px;font-size:20px;color:#50586a;z-index:2}
+.station.active-dot{color:#ffcf4a}
+.s1{left:4%}.s2{left:27%}.s3{left:49%}.s4{left:71%}.s5{left:93%}
+.labels{position:absolute;left:0;right:0;top:68px;display:flex;justify-content:space-between;font-size:9px;color:#aeb5c4}
+.stop-card{width:min(620px,100%);min-height:300px;background:#151923;border:1px solid #292f3d;border-radius:24px;padding:28px 20px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 20px 70px #0006;margin:4px 0 22px}
+.stop-number{color:#ffcf4a;font-size:10px;letter-spacing:2px;font-weight:900}
+.stop-card h2{font-size:31px;margin:9px 0 12px}
+.stop-card p{color:#c0c7d3;line-height:1.65;margin:7px auto;max-width:510px}
+.big{font-size:55px}
+.choice-wrap{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.choice{background:#252b38;color:#fff;border:1px solid #3a4353;padding:11px 13px;border-radius:12px;cursor:pointer}
+.answer{margin-top:13px;font-weight:900;color:#ffcf4a}
+.final-train{font-size:65px;animation:arrive 1.2s ease-out}
+.tiny{font-size:10px;letter-spacing:3px;color:#ffcf4a;font-weight:900}
+#final h1{font-size:clamp(52px,15vw,100px)}
+.birthday-card{width:min(620px,100%);margin-top:20px;padding:30px 21px;background:#151923;border:1px solid #2a3040;border-radius:26px;box-shadow:0 20px 80px #0007}
+.cake{font-size:56px}
+.birthday-card h2{font-size:29px;margin:8px 0 20px}
+.birthday-card p{color:#c8ceda;line-height:1.7}
+.birthday-card .last{color:#fff;font-weight:800}
+.birthday-card h3{color:#ffcf4a;font-size:22px;margin-bottom:0}
+.sign{margin-top:4px!important;color:#9ea7b7!important}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.confetti i{position:absolute;top:-20px;width:8px;height:15px;background:#ffcf4a;animation:fall 3s linear forwards}
+@keyframes bob{50%{transform:translateY(-8px)}}
+@keyframes arrive{from{transform:translateX(-100vw)}to{transform:translateX(0)}}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.9}}
+</style>
+</head>
+<body>
+<main id="app">
+<section class="screen active" id="intro">
+<div class="ticket">SPECIAL TICKET • 14 AUGUST</div>
+<div class="emoji-train">🚆</div>
+<h1>A Journey<br><span>for Scooby</span></h1>
+<div class="sub">Kasaragod → Kochi</div>
+<div class="small">A completely unnecessary train journey for a very necessary person. 😂</div>
+<button class="primary" id="start">START JOURNEY 🚆</button>
+</section>
+
+<section class="screen" id="journey">
+<div class="topbar"><span>MISSION: SCOOBY</span><span id="counter">STOP 1/5</span></div>
+<div class="route">
+<div class="line"></div><div class="train" id="train">🚆</div>
+<div class="station s1 active-dot">●</div><div class="station s2">●</div><div class="station s3">●</div><div class="station s4">●</div><div class="station s5">●</div>
+<div class="labels"><span>Kasaragod</span><span>Kannur</span><span>Kozhikode</span><span>Thrissur</span><span>Kochi</span></div>
+</div>
+<div class="stop-card" id="card"></div>
+<button class="primary" id="next">NEXT STOP →</button>
+</section>
+
+<section class="screen" id="final">
+<div class="confetti" id="confetti"></div>
+<div class="final-train">🚆💨</div>.
+<div class="tiny">DESTINATION REACHED</div>
+<h1>KOCHI 📍</h1>
+<div class="birthday-card">
+<div class="cake">🎂</div>
+<h2>Happy Birthday, Scooby! ❤️</h2>
+<p><b>February 2025:</b> two random people on Instagram.<br><b>August 2026:</b> somehow, 1.5 years of friendship. 😭</p>
+<p>I really need you in my life. You have such a pure heart, you're a genuinely good friend, and somehow we can talk about <b>nothing</b> for hours. 😂</p>
+<p class="last">I can't reach Kochi in real life right now…<br>
+so I created this little journey for you instead. 🚆❤️</p>
+<p>No matter how random our conversations are, I'm really glad Instagram made our paths cross.</p>
+<h3>Happy 19th, Scooby! 🥳</h3><p class="sign">— Ameen</p>
+</div>
+<button class="secondary" id="replay">REPLAY THE JOURNEY 🔁</button>
+</section>
+</main>
+<script>
+const stops=[
+["Kasaragod","DEPARTURE POINT 🚉","📍","This is where the journey starts. One guy in Kasaragod, one girl in Kochi... and absolutely no sensible reason for a train journey. 😂","February 2025 — Instagram did one useful thing."],
+["Kannur","THE RANDOM FOLLOW BACK","📱","You followed back. Ameen sent a message. Somehow the messages continued... and continued... and continued. 😭","Plot twist: neither of us knew this would become a 1.5-year friendship."],
+["Kozhikode","THE 'NO TOPIC' STATION","💬","We don't even need a topic. Somehow we can start talking about absolutely nothing and still keep going. 😂","Scientific conclusion: our conversations run on pure nonsense."],
+["Thrissur","IMPORTANT RESEARCH 🧪","😂","One final question before Kochi. What are Scooby's two greatest life skills?",null],
+["Kochi","FINAL STOP","🎂","Destination reached. But before the birthday reveal, remember: this whole journey started with one random Instagram follow.","Ready for the final station?"]
+];
+let n=0;
+const intro=document.getElementById("intro"),journey=document.getElementById("journey"),final=document.getElementById("final"),card=document.getElementById("card"),train=document.getElementById("train"),counter=document.getElementById("counter"),next=document.getElementById("next");
+function screen(s){[intro,journey,final].forEach(x=>x.classList.remove("active"));s.classList.add("active")}
+function render(){
+let s=stops[n];counter.textContent=`STOP ${n+1}/5`;train.style.left=[4,27,49,71,93][n]+"%";
+document.querySelectorAll(".station").forEach((x,i)=>x.classList.toggle("active-dot",i===n));
+if(n===3){
+card.innerHTML=`<div class="big">😂</div><div class="stop-number">THRISSUR • STOP 4</div><h2>IMPORTANT RESEARCH 🧪</h2><p>One final question before Kochi. What are Scooby's two greatest life skills?</p><div class="choice-wrap"><button class="choice" data-a="1">😴 Sleeping & Eating</button><button class="choice" data-a="0">💻 Coding 24/7</button><button class="choice" data-a="0">🎤 Singing & Dancing</button></div><div class="answer" id="answer"></div>`;
+document.querySelectorAll(".choice").forEach(b=>b.onclick=()=>document.getElementById("answer").textContent=b.dataset.a==="1"?"CORRECT. 😂 Officially confirmed.":"Nice try. 😭 We both know the answer is SLEEP + FOOD.");
+}else{
+card.innerHTML=`<div class="big">${s[2]}</div><div class="stop-number">${s[0].toUpperCase()} • STOP ${n+1}</div><h2>${s[1]}</h2><p>${s[3]}</p>${s[4]?`<p><b>${s[4]}</b></p>`:""}`;
+}
+next.textContent=n===4?"ARRIVE IN KOCHI 🎂":"NEXT STOP →";
+}
+document.getElementById("start").onclick=()=>{n=0;screen(journey);render()};
+next.onclick=()=>{if(n<4){n++;render()}else{screen(final);confetti()}};
+document.getElementById("replay").onclick=()=>{n=0;screen(journey);render()};
+function confetti(){const c=document.getElementById("confetti");c.innerHTML="";for(let i=0;i<70;i++){let x=document.createElement("i");x.style.left=Math.random()*100+"%";x.style.animationDelay=Math.random()*1.7+"s";x.style.transform=`rotate(${Math.random()*360}deg)`;c.appendChild(x)}}
+</script>
+</body>
+</html>";x.style.transform=`rotate(${Math.random()*360}deg)`;c.appendChild(x)}}
+</script>
+</body>
+</html>
